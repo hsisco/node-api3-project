@@ -3,24 +3,50 @@ const router = express.Router();
 
 const Users = require('../users/userDb');
 
-router.post('/', (req, res) => {
-  // do your magic!
+router.post('/', validateUser, (req, res) => {
+  Users.insert(req.body)
+  .then(user => {
+    res.status(201).json({ success: "New user created", user })
+  })
+  .catch(err => {
+    res.status(500).json({ errorMessage: "User not created", err })
+  })
 });
 
-router.post('/:id/posts', (req, res) => {
-  // do your magic!
-});
+// router.post('/:id/posts', (req, res) => {
+//   // do your magic!
+// });
 
 router.get('/', (req, res) => {
-  // do your magic!
+  Users.get()
+    .then(users => {
+      res.status(201).json(users)
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: "Unable to fetch all users", err })
+    })
 });
 
-router.get('/:id', (req, res) => {
-  // do your magic!
+router.get('/:id', validateUserId, (req, res) => {
+  const { id } = req.params.id
+  Users.getById(id)
+    .then(user => {
+			res.status(200).json(user)
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: "Unable to fetch user by ID", err })
+    })
 });
 
-router.get('/:id/posts', (req, res) => {
-  // do your magic!
+router.get('/:id/posts', validateUserId, (req, res) => {
+  const { id } = req.params.id
+  Users.getUserPosts(id)
+    .then(posts => {
+      res.status(200).json(posts)
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: "Unable to fetch user's post", err })
+    })
 });
 
 router.delete('/:id', (req, res) => {
@@ -36,7 +62,6 @@ router.put('/:id', (req, res) => {
 function validateUserId(req, res, next) {
   // do your magic!
   const { id } = req.params.id;
-
   Users.getById(id)
   .then(user => {
     if(user !== undefined){
