@@ -64,11 +64,9 @@ function validatePostId(req, res, next) {
   const { id } = req.params.id;
   Posts.getById(id)
   .then(post => {
-    if(post !== undefined){
-      req.post = post
-    } else {
-      res.status(400).json({ errorMessage: "Invalid post id", err })
-    }
+    post
+      ? req.post
+      : res.status(400).json({ errorMessage: "Invalid post id", err })
   });
   next();
 }

@@ -101,11 +101,9 @@ function validateUserId(req, res, next) {
   const { id } = req.params.id;
   Users.getById(id)
   .then(user => {
-    if(user !== undefined){
-      req.user = user
-    } else {
-      res.status(400).json({ errorMessage: "Invalid user id", err })
-    }
+    user
+      ? req.user
+      : res.status(400).json({ errorMessage: "Invalid user id", err })
   });
   next();
 };
