@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Posts = require('../posts/postDb');
+const Users = require('../users/userDb');
 
 router.get('/', (req, res) => {
   // do your magic!
