@@ -4,6 +4,7 @@ const router = express.Router();
 const Users = require('../users/userDb');
 const Posts = require('../posts/postDb');
 
+// ADD NEW USER
 router.post('/', validateUser, (req, res) => {
   Users.insert(req.body)
   .then(user => {
@@ -14,6 +15,7 @@ router.post('/', validateUser, (req, res) => {
   })
 });
 
+// ADD NEW POST
 router.post('/:id/posts', validateUser, validateUserId, (req, res) => {
   const { user_id } = req.params.id;
   const { body } = req.body;
@@ -26,6 +28,7 @@ router.post('/:id/posts', validateUser, validateUserId, (req, res) => {
   })
 });
 
+// FETCH ALL USERS
 router.get('/', (req, res) => {
   Users.get()
     .then(users => {
@@ -36,6 +39,7 @@ router.get('/', (req, res) => {
     })
 });
 
+// FETCH USER BY ID
 router.get('/:id', validateUserId, (req, res) => {
   const { id } = req.params.id;
   Users.getById(id)
@@ -47,6 +51,7 @@ router.get('/:id', validateUserId, (req, res) => {
     })
 });
 
+// FETCH ALL USER'S POSTS
 router.get('/:id/posts', validateUserId, (req, res) => {
   const { id } = req.params.id;
   Users.getUserPosts(id)
@@ -58,6 +63,7 @@ router.get('/:id/posts', validateUserId, (req, res) => {
     })
 });
 
+// DELETE USER
 router.delete('/:id', validateUserId, (req, res) => {
   const { id } = req.params.id;
   Users.remove(id)
@@ -68,6 +74,7 @@ router.delete('/:id', validateUserId, (req, res) => {
   })
 });
 
+// UPDATE USER
 router.put('/:id', validateUser, validateUserId, (req, res) => {
   const { id } = req.params.id;
   const { body } = req.body;
