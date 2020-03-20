@@ -17,4 +17,4 @@ function logger(req, res, next) {
   next();
 }
 
-module.exports = {server, logger};
+module.exports = server;
