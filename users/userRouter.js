@@ -66,9 +66,17 @@ router.get('/:id/posts', validateUserId, (req, res) => {
 // DELETE USER
 router.delete('/:id', validateUserId, (req, res) => {
   const { id } = req.params.id;
-  Users.remove(id)
-  .then(res.status(200).json({ success: "User deleted" })
-  )
+  Users.getById(id)
+  .then(user => {
+    user
+      ? Users.remove(id)
+        .then(deleted => {
+          deleted
+            ? res.status(200).json({ success: `User ${id} deleted`, info: user })
+            : null
+        })
+        : null
+  })
   .catch(err => {
     res.status(500).json({ errorMessage: "Unable to delete user", err })
   })
@@ -83,7 +91,7 @@ router.put('/:id', validateUser, validateUserId, (req, res) => {
     res.status(201).json({ success: "User updated", info: body })
   })
   .catch(err => {
-    res.status(500).json({ errorMessage: "User not updated", err })
+    res.status(500).json({ errorMessage: "Unable to update user", err })
   })
 });
 
